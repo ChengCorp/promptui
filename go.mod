@@ -1,4 +1,4 @@
-module github.com/manifoldco/promptui
+module github.com/ChengCorp/promptui
 
 require (
 	github.com/alecthomas/gometalinter v3.0.0+incompatible
