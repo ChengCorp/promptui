@@ -48,6 +48,9 @@ type Select struct {
 	// HideHelp sets whether to hide help information.
 	HideHelp bool
 
+	// HideLabel sets whether to hide the prompt label displayed after an item is successfully selected.
+	HideLabel bool
+
 	// HideSelected sets whether to hide the text displayed after an item is successfully selected.
 	HideSelected bool
 
@@ -382,13 +385,18 @@ func (s *Select) innerRun(cursorPos, scroll int, top rune) (int, string, error) 
 	items, idx := s.list.Items()
 	item := items[idx]
 
-	if s.HideSelected {
+	if s.HideSelected && s.HideLabel {
 		clearScreen(sb)
 	} else {
 		sb.Reset()
-		sb.Write(render(s.Templates.selected, item))
+		if !s.HideSelected {
+			if !s.HideLabel {
+				sb.WriteString(fmt.Sprintf("%v", s.Label))
+			}
+			sb.Write(render(s.Templates.selected, item))
+		}
 		sb.Flush()
-	}
+	} 
 
 	rl.Write([]byte(showCursor))
 	rl.Close()
